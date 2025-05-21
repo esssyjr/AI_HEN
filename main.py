@@ -129,7 +129,7 @@ def clear_conversation(lang: str):
 async def chat_endpoint(
     message: str = Form(default=""),
     lang: str = Form(default="english"),
-    image: UploadFile = File(None),  # Make image optional
+    image: UploadFile | None = File(None),  # Explicitly allow None for image
 ):
     try:
         if lang.lower() not in ["english", "hausa"]:
@@ -138,7 +138,7 @@ async def chat_endpoint(
 
         # Process image if provided
         image_obj = None
-        if image:
+        if image and isinstance(image, UploadFile):
             image_data = await image.read()
             try:
                 image_obj = Image.open(io.BytesIO(image_data))
