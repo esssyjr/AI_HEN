@@ -37,7 +37,7 @@ app.add_middleware(
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Store conversation history
+# Store conversation history per session
 conversation_history = []
 
 # Request model for chat input
@@ -53,25 +53,26 @@ def chat_with_vet(message: str, image: Image.Image | None, lang: str):
             return {"error": error_msg}
 
         # Build conversation history
-        messages = []
-        if message:
-            messages.append({"role": "user", "content": message})
-        conversation_history_messages = [msg["parts"][0] for msg in conversation_history]
-        messages.extend([{"role": "assistant" if i % 2 == 1 else "user", "content": msg} for i, msg in enumerate(conversation_history_messages)])
-
-        # Construct prompt
-        prompt_text = (
+        messages = [{"role": "system", "content": (
             f"You are an intelligent veterinary chatbot specializing in poultry. You will receive images of hen feces or hen physical body conditions (if provided), along with user inputs. "
             f"Analyze the provided images (if any) and text inputs to diagnose potential diseases and recommend appropriate medications, including organic treatment options. "
             f"Provide brief, clear responses in a natural, conversational tone in {lang} ('english' or 'hausa'). "
-            f"If additional information is necessary for an accurate diagnosis, ask one concise, relevant follow-up question at a time, limiting to a maximum of three questions. Do not preemptively mention or list subsequent questions at a time, let it be a single question at a time, the others might follow if needed. "
+            f"If additional information is necessary for an accurate diagnosis, ask one concise, relevant follow-up question at a time, limiting to a maximum of three questions. Do not preemptively mention or list subsequent questions; ask only one question at a time, and wait for the user's response before asking another if needed. "
             f"Once sufficient information is gathered, provide a concise prediction that lists only the likely disease(s) and specific medication(s) in {lang}. "
-            f"When recommending treatments (both conventional and organic), also suggest checking our marketplaces in the application for availability. but be aware that you are answering questions from a beginner, dont complicate the process. make a precise medication recommendation."
+            f"When recommending treatments (both conventional and organic), suggest checking our marketplaces in the application for availability. Ensure recommendations are simple and beginner-friendly, with precise medication suggestions. "
             f"If the suggested treatments prove ineffective or the condition worsens, advise the user to consult a professional veterinary doctor. "
             f"Understand that your diagnoses and recommendations are based on high probability and are for a prototype system, not a definitive professional diagnosis."
-        )
+        )}]
 
-        messages.insert(0, {"role": "system", "content": prompt_text})
+        # Add conversation history
+        for i, msg in enumerate(conversation_history):
+            role = "assistant" if msg["role"] == "assistant" else "user"
+            messages.append({"role": role, "content": msg["parts"][0]})
+
+        # Add current message if provided
+        if message:
+            messages.append({"role": "user", "content": message})
+            conversation_history.append({"role": "user", "parts": [message]})
 
         # Add image if provided
         if image:
@@ -96,6 +97,7 @@ def chat_with_vet(message: str, image: Image.Image | None, lang: str):
                     },
                 ],
             })
+            conversation_history.append({"role": "user", "parts": ["Image provided for analysis"]})
 
         # Call OpenAI API
         response = client.chat.completions.create(
@@ -104,7 +106,13 @@ def chat_with_vet(message: str, image: Image.Image | None, lang: str):
         )
         response_text = response.choices[0].message.content.strip()
 
+        # Append assistant response to history
         conversation_history.append({"role": "assistant", "parts": [response_text]})
+        
+        # Limit conversation history to prevent excessive growth (e.g., last 10 messages)
+        if len(conversation_history) > 10:
+            conversation_history[:] = conversation_history[-10:]
+
         return {"response": response_text}
 
     except Exception as e:
