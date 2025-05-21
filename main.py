@@ -129,16 +129,16 @@ def clear_conversation(lang: str):
 async def chat_endpoint(
     message: str = Form(default=""),
     lang: str = Form(default="english"),
-    image: UploadFile | None = File(None),  # Explicitly allow None for image
+    image: UploadFile | None = File(default=None),  # Explicitly allow None
 ):
     try:
         if lang.lower() not in ["english", "hausa"]:
             error_msg = "Invalid language. Use 'english' or 'hausa'." if lang.lower() == "english" else "Harshen da ba daidai ba. Yi amfani da 'english' ko 'hausa'."
             raise HTTPException(status_code=400, detail=error_msg)
 
-        # Process image if provided
+        # Process image only if a valid file is provided
         image_obj = None
-        if image and isinstance(image, UploadFile):
+        if image and image.filename:  # Check if a file is actually uploaded
             image_data = await image.read()
             try:
                 image_obj = Image.open(io.BytesIO(image_data))
