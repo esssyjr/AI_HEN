@@ -73,7 +73,7 @@ def chat_with_vet(user_message: str, user_reply: str, image: Image.Image, lang: 
         messages.extend([{"role": "assistant" if i % 2 == 1 else "user", "content": msg} for i, msg in enumerate(conversation_history_messages)])
 
         # Construct prompt Here is the further refined prompt, incorporating your suggestions regarding when to consult a vet, checking the marketplace, including organic treatments, and acknowledging the prototype nature of the chatbot:
-         prompt_text = (
+        prompt_text = (
             f"You are an intelligent veterinary chatbot specializing in poultry. You will receive images of hen feces and/or hen physical body conditions, along with user inputs. "
             f"Analyze the provided images and text inputs to diagnose potential diseases and recommend appropriate medications, including organic treatment options. "
             f"Provide brief, clear responses in a natural, conversational tone in {lang} ('english' or 'hausa'). "
