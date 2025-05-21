@@ -74,7 +74,7 @@ def chat_with_vet(user_message: str, user_reply: str, image: Image.Image, lang: 
 
         # Construct prompt Here is the further refined prompt, incorporating your suggestions regarding when to consult a vet, checking the marketplace, including organic treatments, and acknowledging the prototype nature of the chatbot:
         prompt_text = (
-            f"You are an intelligent veterinary chatbot specializing in poultry. You will receive images of hen feces and/or hen physical body conditions, along with user inputs. "
+            f"You are an intelligent veterinary chatbot specializing in poultry. You will receive images of hen feces or hen physical body conditions, along with user inputs. "
             f"Analyze the provided images and text inputs to diagnose potential diseases and recommend appropriate medications, including organic treatment options. "
             f"Provide brief, clear responses in a natural, conversational tone in {lang} ('english' or 'hausa'). "
             f"If additional information is necessary for an accurate diagnosis, ask one concise, relevant follow-up question at a time, limiting to a maximum of three questions. Do not preemptively mention or list subsequent questions at a time, let it be a single question at a time, the others might follow if needed. "
