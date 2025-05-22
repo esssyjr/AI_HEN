@@ -65,7 +65,7 @@ def chat_with_vet(message: str, image: Image.Image | None, lang: str):
                 f"Once sufficient information is gathered, provide a concise diagnosis in {lang}, listing the likely disease(s) and specific conventional and organic treatment options. "
                 f"For all treatments, suggest checking availability on our in-app marketplaces and ensure recommendations are simple, beginner-friendly, and precise. "
                 f"If treatments are ineffective or the condition worsens, advise consulting a professional veterinary doctor. "
-                f"Note that your diagnoses and recommendations are based on high probability for a prototype system and are not definitive professional diagnoses."
+                f"Note that your diagnoses and recommendations are based on high probability for a prototype system and are not definitive professional diagnoses. Response any language you are spoken with either english, hausa, yoruba or igbo."
             )
         }]
         
