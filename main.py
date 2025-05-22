@@ -63,7 +63,7 @@ def chat_with_vet(message: str, image: Image.Image | None, lang: str):
             f"Once sufficient information is gathered, provide a concise prediction listing the likely disease(s) and specific medication(s) in {lang}. "
             f"When recommending treatments (both conventional and organic), suggest checking our marketplaces in the application for availability. Ensure recommendations are simple and beginner-friendly, with precise medication suggestions. "
             f"If the suggested treatments prove ineffective or the condition worsens, advise the user to consult a professional veterinary doctor. "
-            f"Understand that your diagnoses and recommendations are based on high probability and are for a prototype system, not a definitive professional diagnosis."
+            f"Understand that your diagnoses and recommendations are based on high probability and are for a prototype system, not a definitive professional diagnosis.i really want the follow up questions. and if a question is asked in hausa, reply also ij hausa. "
         )}]
 
         # Add past conversation
