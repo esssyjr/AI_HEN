@@ -60,7 +60,7 @@ curl -X POST http://localhost:8000/chat \
   -F "message=Gashi nan" \
   -F "lang=hausa" \
   -F "image=@hen_feces.jpg"
-
+```
 ---
 
 ## 🔄 POST `/clear`
@@ -98,7 +98,7 @@ Returns welcome information and usage guide in both **English** and **Hausa**.
 ├── main.py            # FastAPI backend logic
 ├── .env               # API key for OpenAI (secure)
 └── README.md          # Project documentation
-
+```
 ---
 
 ## 📈 Why It Matters
