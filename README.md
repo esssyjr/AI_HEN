@@ -50,7 +50,7 @@ Send a message (and optional image) to the veterinary assistant.
 curl -X POST http://localhost:8000/chat \
   -F "message=My chicken has diarrhea" \
   -F "lang=english"
-
+```
 ---
 
 ### 📦 Example (With Image)
